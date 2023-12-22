@@ -6,13 +6,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const port = process.env.PORT || 3000;
 
 
-// Sakib-alam
-// iLgkSMmvvsqEvB6J
-
-
 app.use(cors());
 app.use(express.json());
-
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@job-task.qr3gtpu.mongodb.net/?retryWrites=true&w=majority`;
@@ -28,9 +23,14 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
-    // Send a ping to confirm a successful connection
+    const taskcollection = client.db('Alltask').collection('task');
+
+    // all task api
+    app.post('/task',async(req,res)=>{
+      const user = req.body;
+      const result = await taskcollection.insertOne(user)
+       res.send(result)
+    })
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
